@@ -68,21 +68,37 @@ To verify that the OpenWeather “Current Weather Data” API functions correctl
 
 ### 7. Deliverables
 
-* Test Plan
 * Test Case Sheet
 * Bug Report
 * Automation Script (pytest)
 
 ---
 
-### 8. Risks
+### 8. Test Cases
+
+| Test Case ID | Test Scenario                | Test                  | Expected Result                                                        | Type        | Priority |
+| ------------ | ---------------------------- | --------------------- | ---------------------------------------------------------------------- | ----------- | -------- |
+| TC-001  | Verify API response for valid city name  | Send GET request to `/data/2.5/weather?q=London&appid=API_KEY`  | Response Code = 200; JSON contains "London" in `name` field and valid weather data  | Functional  | High  |
+| TC-002  | Verify API response for valid city with country code  | Send GET request to `/data/2.5/weather?q=Paris,FR&appid=API_KEY`  | Response Code = 200; Country = "FR"  | Functional  | Medium  |
+| TC-003  | Verify API response for invalid city name  | Send GET request to `/data/2.5/weather?q=InvalidCity123&appid=API_KEY`  | Response Code = 404; Message = "city not found"  |  Negative  | High  |
+| TC-004  | Verify response when API key is missing  | Send GET request without `appid`  | Response Code = 401; Message indicates invalid key  | Negative  | Critical  |
+| TC-005  | Verify response for invalid API key  | Send GET request with wrong `appid`  | Response Code = 401; Message = "Invalid API key"  | Negative  | Critical  |
+| TC-006  | Verify response when city name is empty  | Send GET request with `q=`  | Response Code = 400 or 404; Message indicating missing or invalid city  | Negative  | Medium  |
+| TC-007  | Verify response using coordinates (lat/lon)  | Send GET request with `lat=35&lon=139`  | Response Code = 200; City returned matches expected region (Tokyo area)  | Functional  | Medium  |
+| TC-008  | Verify response contains all main fields  | Send GET request for any valid city  | JSON contains keys: `coord`, `weather`, `main`, `wind`, `sys`, `name`  | Functional  | High  |
+| TC-009  | Verify temperature unit conversion  | Send GET request with `units=metric` and `units=imperial`  | Both responses return different temperature values  | Functional  | Medium  |
+| TC-010  | Verify API response time  | Measure response time for valid request  | Response time < 2 seconds  | Performance  | Low  |
+
+---
+
+### 9. Risks
 
 * API downtime or rate limits during testing
 * Invalid key usage
 
 ---
 
-### 9. References
+### 10. References
 
 * OpenWeather API Docs: [https://openweathermap.org/api](https://openweathermap.org/api)
 
